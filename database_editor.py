@@ -41,6 +41,7 @@ VALUES(%s, %s, %s, %s)', (name, home, age, race))
             sure = input("Are you sure(Y,N): ")
             if sure == "Y":
                 self.cur.execute('DELETE from character WHERE name =  %s', (input_name,))
+                break
             if sure == "N":
                 sure = False
         self.connection.commit()
@@ -49,37 +50,22 @@ VALUES(%s, %s, %s, %s)', (name, home, age, race))
         input_name = input("Whose info would you like to edit: ")
         input_field = False
         input_change = False
-        choices = ["1", "2", "3", "4"]
-        while input_field not in choices:
+        choices = {"1": "name", "2": "home_city", "3": "age", "4": "race"}
+        while input_field not in choices.keys():
             input_field = input("Which field to edit? name(1), home_city(2), age(3), race(4): ")
-        if input_field == "1":
-            input_field = 'name'
-        elif input_field == "2":
-            input_field = 'home_city'
-        elif input_field == "3":
-            input_field = 'age'
-        elif input_field == "4":
-            input_field = 'race'
+        input_field = choices[input_field]
         while not input_change:
             input_change = input("What to change it to: ")
         self.cur.execute('UPDATE character SET {} = %s WHERE name = %s'.format(input_field), (input_change, input_name))
         self.connection.commit()
 
     def view_character(self):
+        choices = {"1": 'name', "2": 'home_city', "3": 'race'}
         while True:
             what_to_view = input("what do you want to lookup? name(1) , home city(2), race(3): ")
-            if what_to_view == "1":
-                what_to_view = 'name'
-                search = input("what name do you want to view: ")
-                break
-            elif what_to_view == "2":
-                what_to_view = 'home_city'
-                search = input("what city do you want to view: ")
-                break
-            elif what_to_view == "3":
-                what_to_view = 'race'
-                search = input("what race do you want to view: ")
-                break
+            what_to_view = choices[what_to_view]
+            search = input("what {} do you want to view: ".format(what_to_view))
+            break
         self.cur.execute("SELECT * from character WHERE {} = %s".format(what_to_view), (search,))
         print("\n")
         while True:
