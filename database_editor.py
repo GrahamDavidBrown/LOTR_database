@@ -9,7 +9,7 @@ class DB_Editor:
     def menu(self):
         while True:
             menu_select = input("Would you like to add(1) a character, \
-delete(2) a character, edit(3) a character, or view(4) characters or quit(Q): ")
+delete(2) a character, edit(3) a character, view(4) characters, or quit(Q): ")
             if menu_select == "1":
                 self.add_character()
                 break
