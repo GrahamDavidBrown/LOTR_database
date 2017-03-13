@@ -23,7 +23,7 @@ delete(2) a character, edit(3) a character, view(4) characters, or quit(Q): ")
                 self.view_character()
                 break
             elif menu_select == "Q":
-                return True
+                return "Quit"
 
     def add_character(self):
         name = input("Character name: ")
@@ -36,13 +36,22 @@ VALUES(%s, %s, %s, %s)', (name, home, age, race))
 
     def del_character(self):
         input_name = input("Name of character to remove: ")
-        self.cur.execute('DELETE from character WHERE name =  %s', (input_name,))
+        sure = "?"
+        while sure:
+            sure = input("Are you sure(Y,N): ")
+            if sure == "Y":
+                self.cur.execute('DELETE from character WHERE name =  %s', (input_name,))
+            if sure == "N":
+                sure = False
         self.connection.commit()
 
     def edit_info(self):
         input_name = input("Whose info would you like to edit: ")
         input_field = False
-        input_field = input("Which field to edit? name(1), home_city(2), age(3), race(4): ")
+        input_change = False
+        choices = ["1", "2", "3", "4"]
+        while input_field not in choices:
+            input_field = input("Which field to edit? name(1), home_city(2), age(3), race(4): ")
         if input_field == "1":
             input_field = 'name'
         elif input_field == "2":
@@ -51,7 +60,8 @@ VALUES(%s, %s, %s, %s)', (name, home, age, race))
             input_field = 'age'
         elif input_field == "4":
             input_field = 'race'
-        input_change = input("What to change it to: ")
+        while not input_change:
+            input_change = input("What to change it to: ")
         self.cur.execute('UPDATE character SET {} = %s WHERE name = %s'.format(input_field), (input_change, input_name))
         self.connection.commit()
 
