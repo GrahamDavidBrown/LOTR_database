@@ -9,7 +9,7 @@ class DB_Editor:
     def menu(self):
         while True:
             menu_select = input("Would you like to add(1) a character, \
-delete(2) a character, edit(3) a character, or view(4) characters: ")
+delete(2) a character, edit(3) a character, or view(4) characters or quit(Q): ")
             if menu_select == "1":
                 self.add_character()
                 break
@@ -22,6 +22,8 @@ delete(2) a character, edit(3) a character, or view(4) characters: ")
             elif menu_select == "4":
                 self.view_character()
                 break
+            elif menu_select == "Q":
+                return True
 
     def add_character(self):
         name = input("Character name: ")
@@ -85,8 +87,8 @@ VALUES(%s, %s, %s, %s)', (name, home, age, race))
 def main():
     print("Welcome to the Tolkien database!")
     db_edit = DB_Editor()
-    while True:
-        db_edit.menu()
+    while not db_edit.menu():
+        pass
     db_edit.cur.close()
     db_edit.connection.close()
 
